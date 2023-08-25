@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background: var(--primary-bg);
+  color: var(--accent-gray);
+  font-size: var(--font-bg);
+}
+
+:root {
+  /* color palete */
+  --primary-bg: #192a32;
+  --secondary-bg: #1f3540;
+  --cross: #38c4be;
+  --circle: #f2b238;
+  --accent-gray: #a8bec9;
+  --accent-gray-light: #5a707b;
+  --shadow: #0a0d0c;
+
+  /* typography */
+  --font-bg: 2rem;
+  --font-md: 1.5rem;
+  --font-sm: 1rem;
+  --font-xsm: 0.8rem;
+  --font-xxsm: 0.6rem;
+
+  /* layout */
+  --radius-bg: 10px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --radius-xsm: 4px;
+
+  /* settings */
+  --button-animate: translate(-1px, 1px);
+  --button-shadows: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.302) 0px 4px 3px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  --card-shadows: rgba(21, 36, 44, 0.8) 0px 7px 29px 0px;
+}
