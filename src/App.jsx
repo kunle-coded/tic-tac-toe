@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./app.css";
 import Start from "./components/Start";
 import SelectPlayer from "./components/SelectPlayer";
@@ -8,11 +8,12 @@ function App() {
   const [startGame, setStart] = useState(false);
   const [playerSelected, setPlayerSelected] = useState(true);
   const [gameStarted, setGameStarted] = useState(true);
-  const [playerMark, setMark] = useState("");
-  const [players, setPlayers] = useState({
-    player1: {name: "Player 1", mark: "X"},
-    player2: {name: "Player 2", mark: "O"},
-  })
+  const [chosenMark, setChosenMark] = useState(null);
+
+  // let player1 = "X";
+  // let player2 = "O";
+  // let count = 0;
+
 
   function handleStart() {
     setStart(true);
@@ -23,22 +24,36 @@ function App() {
   function handlePlayers(){
     setPlayerSelected(true);
     setGameStarted(false);
-    console.log("Player selected", players.player1.mark);
   }
+
+  let currentPlayer = {
+    player: "",
+  };
 
   function handleMark(e){
-    if(players.player1.mark != e){
-      players.player1.mark = e;
-    }
+    
+    console.log("player selected -+- e", e);
+    currentPlayer.player = e;
+    setChosenMark(e);
+  
+    console.log("player selected -+- pl", currentPlayer.player);
+    // const selEl = e;
 
-    if(players.player1.mark === "O"){
-      players.player2.mark = "X";
-    } else{
-      players.player2.mark = "O";
-    }
-    console.log("Player 1 mark selected", players.player1.mark);
-    console.log("Player 2 mark selected", players.player2.mark);
+    // if(player1 != e){
+    //   player1 = e;
+    //   setPlayers((prevPlayer) => (prevPlayer === "X" ? e : "X"));
+    //   console.log("player selected -+-+", player1);
+    // }
+    
+    // if(player1 === "O"){
+    //   player2 = "X";
+    // } else{
+    //   player2 = "O";
+    // }
+
+    // console.log("player selected ****", players);
   }
+  
 
   function handleGame(){
     setGameStarted(true);
@@ -58,7 +73,7 @@ function App() {
       <div className="container">
         <Start startFunc={handleStart} start={startGame} />
         <SelectPlayer playerFunc={handlePlayers} playerSel={playerSelected} mark={handleMark}/>
-        <Board gameFunc={handleGame} gameStart={gameStarted} gameReset={handleReset} playerState={players}/>
+        <Board gameFunc={handleGame} gameStart={gameStarted} gameReset={handleReset} playerMark={chosenMark}/>
       </div>
     </div>
   );

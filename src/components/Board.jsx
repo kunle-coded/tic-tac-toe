@@ -1,12 +1,17 @@
-import React, { useRef, useState } from "react";
-import reset from "../assets/icons/reset.svg";
+import React, { useEffect, useRef, useState } from "react";
 
 function Board(props) {
 
-  const [playerMark, setPlayerMark] = useState(props.playerState.player1.mark);
+  const [playerMark, setPlayerMark] = useState("X");
+  const chosenMark = props.playerMark;
+
+  useEffect(() => {
+    if(chosenMark != null){
+      setPlayerMark("O");
+    }
+  }, [chosenMark]);
 
   const gameStarted = props.gameStart;
-  const players = props.playerState;
   let moves = 0;
   const resetRef = useRef(null);
 
@@ -21,37 +26,57 @@ function Board(props) {
       if(el.textContent != ""){
         el.textContent = "";
       }
+      el.classList.remove("mark-cross", "mark-circle");
     })
+
+    if(chosenMark != null){
+      setPlayerMark("O");
+    } else {
+      setPlayerMark("X");
+    }
 
   }
 
+  function checkWinner(player){
+
+  }
+
+  function checkDraw(){
+    // console.log("Draw!");
+  }
+
   function playerMove(e){
-    console.log("Player move!", e.target)
-    // console.log(4%2);
-    
-    if(e.target.textContent === ""){
-      ++moves;
-      const even = moves%2 === 0;
-      if(even && moves >= 1){
-        setPlayerMark(players.player2.mark);
-        e.target.textContent = players.player2.mark;
-        e.target.classList.add("mark-circle");
-      } else{
-        setPlayerMark(players.player1.mark);
-        e.target.textContent = players.player1.mark;
-        e.target.classList.add("mark-cross");
-      }
-      console.log(moves);
-    } else{
+
+    const cell = e.target;
+
+    if (cell.textContent) {
+      // Abort function execution
       return;
     }
 
-    // if(moves%2 === 0){
-    //   setPlayerMark(players.player2.mark);
-    // } else {
-    //   setPlayerMark(players.player1.mark);
-    // }
-    
+    // cell.textContent = playerMark;
+    cell.textContent = playerMark;
+      
+    if(cell.textContent === "X"){
+      cell.classList.add("mark-cross");
+    } else { 
+      cell.classList.add("mark-circle");
+    }
+      
+
+    // Check for a win or draw
+    if (checkWinner(playerMark)) {
+      alert(`${playerMark} wins!`);
+      resetGame();
+    } else if (checkDraw()) {
+      alert("It's a draw!");
+      resetGame();
+    } else {
+      // currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+      setPlayerMark((prevPlayer) => (prevPlayer === "X" ? "O" : "X"));
+    } 
+  
   }
 
   return (

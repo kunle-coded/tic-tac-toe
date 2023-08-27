@@ -26,8 +26,8 @@ function SelectPlayer(props) {
     if(isSelected != selected.textContent){
       setSelected(selected.textContent);
     }
-
-    playerMark(selected.textContent);
+    const selectedMark = selected.textContent;
+    playerMark(selectedMark);
     
   }
 
@@ -43,7 +43,7 @@ function SelectPlayer(props) {
       </div>
       <div className="player-mark">
         <div className="mark-info">Pick player 1's mark</div>
-        <div className="select-mark" onClick={(e) => {handleSelect(e)}}>
+        <div className="select-mark" onClick={handleSelect}>
           <div className="mark">X</div>
           <div className="mark selected-mark">O</div>
         </div>
