@@ -3,17 +3,28 @@ import React, { useEffect, useRef, useState } from "react";
 function Board(props) {
 
   const [playerMark, setPlayerMark] = useState("X");
+  const [player1, setPlayer1] = useState("X");
+  const [player2, setPlayer2] = useState("O");
   const chosenMark = props.playerMark;
 
   useEffect(() => {
     if(chosenMark != null){
       setPlayerMark("O");
+      setPlayer1("O");
+      setPlayer2("X");
     }
   }, [chosenMark]);
+
+  console.log("player1", player1);
+  console.log("player2", player2);
 
   const gameStarted = props.gameStart;
   let moves = 0;
   const resetRef = useRef(null);
+  // const player1 = "X";
+  // const player2 = "O";
+  let player1Score = 0;
+  let player2Score = 0;
 
   function resetGame(){
     props.gameReset();
@@ -27,6 +38,7 @@ function Board(props) {
         el.textContent = "";
       }
       el.classList.remove("mark-cross", "mark-circle");
+      el.classList.remove("winning-crosses", "winning-circles");
     })
 
     if(chosenMark != null){
@@ -39,7 +51,68 @@ function Board(props) {
 
   function checkWinner(player){
 
+    // Check for a win
+    const element = resetRef.current;
+    const squareElements = element.childNodes;
+
+    // console.log("squareElements", squareElements);
+
+    // Check for a win
+    if (
+      (squareElements[0].textContent === player &&
+        squareElements[1].textContent === player &&
+        squareElements[2].textContent === player) ||
+      (squareElements[3].textContent === player &&
+        squareElements[4].textContent === player &&
+        squareElements[5].textContent === player) ||
+      (squareElements[6].textContent === player &&
+        squareElements[7].textContent === player &&
+        squareElements[8].textContent === player) ||
+      (squareElements[0].textContent === player &&
+        squareElements[3].textContent === player &&
+        squareElements[6].textContent === player) ||
+      (squareElements[1].textContent === player &&
+        squareElements[4].textContent === player &&
+        squareElements[7].textContent === player) ||
+      (squareElements[2].textContent === player &&
+        squareElements[5].textContent === player &&
+        squareElements[8].textContent === player) ||
+      (squareElements[0].textContent === player &&
+        squareElements[4].textContent === player &&
+        squareElements[8].textContent === player) ||
+      (squareElements[2].textContent === player &&
+        squareElements[4].textContent === player &&
+        squareElements[6].textContent === player)
+    ) {
+      squareElements.forEach(el => {
+        //el.classList.remove("mark-cross", "mark-circle");
+        if(el.textContent === player){
+          if(player === "X"){
+            el.classList.add("winning-crosses");
+            console.log("winning squares", el);
+          } else {
+            el.classList.add("winning-circles");
+            console.log("winning squares", el);
+          }
+        }
+      })
+
+      if(player === player1){
+        player1Score++;
+        console.log("player1Score", player1Score);
+      } else {
+        player2Score++;
+        console.log("player2Score", player2Score);
+      }
+
+      console.log(`${player} wins!`);
+      return true;
+    }
   }
+
+  useEffect(() => {
+    
+  }, [player1Score, player2Score]);
 
   function checkDraw(){
     // console.log("Draw!");
@@ -67,7 +140,7 @@ function Board(props) {
     // Check for a win or draw
     if (checkWinner(playerMark)) {
       alert(`${playerMark} wins!`);
-      resetGame();
+      // resetGame();
     } else if (checkDraw()) {
       alert("It's a draw!");
       resetGame();

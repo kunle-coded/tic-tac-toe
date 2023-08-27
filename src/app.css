@@ -272,6 +272,16 @@ h1 {
   /* border-right: 1px solid yellow; */
 }
 
+.winning-crosses {
+  background: var(--cross);
+  color: var(--primary-bg);
+}
+
+.winning-circles {
+  background: var(--circle);
+  color: var(--primary-bg);
+}
+
 .score-card {
   display: flex;
   justify-content: space-between;
