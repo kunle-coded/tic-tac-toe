@@ -2,6 +2,10 @@ h1 {
   font-size: var(--font-bg);
 }
 
+.App{
+  position: relative;
+}
+
 .container {
   width: 220px;
   height: 350px;
@@ -197,7 +201,7 @@ h1 {
 
 /* board */
 .board {
-  z-index: 4;
+  z-index: 6;
   display: flex;
   justify-content: space-between;
 }
@@ -314,6 +318,92 @@ h1 {
   width: inherit;
 }
 
+/* Win card */
+
+/* .win, .draw{
+  z-index: 10;
+  width: 100%;
+  height: 200px;
+  margin: 0 auto;
+  text-align: center;
+  position: absolute;
+}
+
+.win-card, .draw-card{
+  height: inherit;
+  width: inherit ;
+  background: var(--accent-gray-light);
+} */
+
+.win-card{
+  text-transform: uppercase;
+}
+
+.popup {
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  background-color: var(--primary-bg);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.win-info{
+  font-size: var(--font-sm);
+}
+
+.win-title{
+  font-size: var(--font-bg);
+  font-weight: 700;
+  color: var(--cross);
+}
+
+.win-buttons{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--accent-gray);
+  color: black;
+  height: 25px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  padding: 5px;
+  cursor: pointer;
+  box-shadow: var(--button-shadows);
+  text-transform: uppercase;
+  transform: var(--button-animate);
+}
+
+.btn-next{
+  background: var(--circle);
+}
+
 .hide {
   visibility: hidden;
+}
+
+.won{
+  cursor: none;
 }
