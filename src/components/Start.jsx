@@ -5,7 +5,6 @@ function Start(props) {
 
   function handlePlay() {
     startGame();
-    console.log("Playing now!");
   }
 
   return (

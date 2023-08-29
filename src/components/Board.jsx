@@ -5,9 +5,6 @@ function Board(props) {
   const [playerMark, setPlayerMark] = useState("X");
   const [player1, setPlayer1] = useState("X");
   const [player2, setPlayer2] = useState("O");
-  const [player1Score, setPlayer1Score] = useState(0);
-  const [player2Score, setPlayer2Score] = useState(0);
-  const [drawScore, setDrawScore] = useState(0);
 
   const chosenMark = props.playerMark;
 
@@ -19,46 +16,21 @@ function Board(props) {
     }
   }, [chosenMark]);
 
-
   const gameStarted = props.gameStart;
   let moves = 0;
+  const scores = props.scores;
   const resetRef = useRef(null);
-  // const player1 = "X";
-  // const player2 = "O";
 
-  function resetGame(){
-    props.gameReset();
-
-    // Delete or marked square on reset
-    const element = resetRef.current;
-    const squareElements = element.childNodes;
-    
-    squareElements.forEach(el => {
-      if(el.textContent != ""){
-        el.textContent = "";
-      }
-      el.classList.remove("mark-cross", "mark-circle");
-      el.classList.remove("winning-crosses", "winning-circles");
-    })
+  function restartGame(){
+    props.getRef(resetRef);
+    props.restartGame();
 
     if(chosenMark != null){
       setPlayerMark("O");
     } else {
       setPlayerMark("X");
     }
-
-    // Reset scores
-    setPlayer1Score(0);
-    setPlayer2Score(0);
-    setDrawScore(0);
-
   }
-
-  useEffect(() => {
-    if(props.resetGlobal){
-      resetGame();
-    }
-  }, [props.resetGlobal]);
 
     
     function checkWinner(player){
@@ -73,18 +45,19 @@ function Board(props) {
       [0, 4, 8], [2, 4, 6]             // Diagonals
       ];
 
-    // Check for a win
-    if ((squareElements[0].textContent === player && squareElements[1].textContent === player &&
-    squareElements[2].textContent === player) || (squareElements[3].textContent === player &&
-    squareElements[4].textContent === player && squareElements[5].textContent === player) || (squareElements[6].textContent === player && squareElements[7].textContent === player &&
-    squareElements[8].textContent === player) || (squareElements[0].textContent === player &&
-    squareElements[3].textContent === player && squareElements[6].textContent === player) || (squareElements[1].textContent === player && squareElements[4].textContent === player &&
-    squareElements[7].textContent === player) || (squareElements[2].textContent === player &&
-    squareElements[5].textContent === player && squareElements[8].textContent === player) ||
-    (squareElements[0].textContent === player && squareElements[4].textContent === player && squareElements[8].textContent === player) || squareElements[2].textContent === player &&
-    squareElements[4].textContent === player && squareElements[6].textContent === player) {
+      // Check for a win
+      if ((squareElements[0].textContent === player && squareElements[1].textContent === player &&
+      squareElements[2].textContent === player) || (squareElements[3].textContent === player &&
+      squareElements[4].textContent === player && squareElements[5].textContent === player) || (squareElements[6].textContent === player && squareElements[7].textContent === player &&
+      squareElements[8].textContent === player) || (squareElements[0].textContent === player &&
+      squareElements[3].textContent === player && squareElements[6].textContent === player) || (squareElements[1].textContent === player && squareElements[4].textContent === player &&
+      squareElements[7].textContent === player) || (squareElements[2].textContent === player &&
+      squareElements[5].textContent === player && squareElements[8].textContent === player) ||
+      (squareElements[0].textContent === player && squareElements[4].textContent === player && squareElements[8].textContent === player) || (squareElements[2].textContent === player &&
+      squareElements[4].textContent === player && squareElements[6].textContent === player)) {
 
       props.gameWon();
+
 
     // Check each winning combination
     for (const combination of winningCombinations) {
@@ -109,19 +82,13 @@ function Board(props) {
     }
       
       // Add score to winner
-      if(player === player1){
-        setPlayer1Score(player1Score + 1);
-      } else {
-        setPlayer2Score(player2Score + 1);
-      }
-
+      props.scoreUpdate(player1, player2, player);
       props.winner(player);
-
-      console.log(`${player} wins!`);
+      props.getRef(resetRef);
+      
       return true;
     }
   }
-
 
   function checkDraw(){
     // Check for a draw
@@ -129,25 +96,20 @@ function Board(props) {
     const squareElements = element.childNodes;
 
     squareElements.forEach((el, index) => {
-      // console.log("index", index);
-      console.log("moves", moves);
-      if(el.textContent != ""){
+      if(el.textContent !== ""){
         moves++;
 
         if(moves === 9){
         // Add score to draw
-        setDrawScore(drawScore + 1);
         props.drawGame();
-        console.log("Draw! 😬");
+        props.getRef(resetRef);
 
+        return true;
+        
+        }
       }
-      }
-      
     })
-  }
 
-  function nextRound(){
-    console.log("Next round");
   }
 
   function playerMove(e){
@@ -172,13 +134,11 @@ function Board(props) {
 
     // Check for a win or draw
     if (checkWinner(playerMark)) {
-      alert(`${playerMark} wins!`);
       // resetGame();
     } else if (checkDraw()) {
       alert("It's a draw!");
-      resetGame();
+      // resetGame();
     } else {
-      // currentPlayer = currentPlayer === "X" ? "O" : "X";
 
       setPlayerMark((prevPlayer) => (prevPlayer === "X" ? "O" : "X"));
     }
@@ -195,7 +155,7 @@ function Board(props) {
         <div className="game-turn">
           {playerMark} Turn
         </div>
-        <div className="game-reset" onClick={resetGame}>
+        <div className="game-reset" onClick={restartGame}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="0.6em"
@@ -222,15 +182,15 @@ function Board(props) {
       <div className="score-card">
         <div className="player--one-score score-btn">
           <div className="score-text">{player1} (You)</div>
-          <div className="scores">{player1Score}</div>
+          <div className="scores">{scores.player1}</div>
         </div>
         <div className="draw-score score-btn">
           <div className="score-text">Ties</div>
-          <div className="scores">{drawScore}</div>
+          <div className="scores">{scores.draw}</div>
         </div>
         <div className="player--two-score score-btn">
           <div className="score-text">{player2} (CPU)</div>
-          <div className="scores">{player2Score}</div>
+          <div className="scores">{scores.player2}</div>
         </div>
       </div>
     </div>
